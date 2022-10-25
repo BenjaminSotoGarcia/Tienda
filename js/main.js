@@ -1,63 +1,94 @@
-class Aliado {
-    constructor (nombre, oficio, vida, ataque){
-        this.nombre = nombre;
-        this.oficio = oficio;
-        this.vida = vida;
-        this.atque = ataque;
-    }
-}
-
-let arqueroN1 = new Aliado("Arquero Nivel 1", "Arquero", 1000, 25)
-let guerreroN1 = new Aliado("Guerrero Nivel 1", "Guerrero", 1200, 30)
-let caballeroN1 = new Aliado("Caballero Nivel 1", "Caballero", 1500, 35)
-let hechizeroN1 = new Aliado("Hechizero Nivel 1", "Hechicero", 1500, 34)
-
-console.log(arqueroN1)
-console.log(guerreroN1)
-console.log(caballeroN1)
-console.log(hechizeroN1)
+const shopContent = document.getElementById("shopContent");
+const verCarrito = document.getElementById("verCarrito");
+const modalContainer = document.getElementById("modal-container")
 
 
-let Inicio = alert ("Bienvenidos a nuestra beta!")
-let Inicio1 = alert ("Tienes que escoger entre alguno de nuestros 4 aliados")
-let Inicio2 = alert ("Aliado N°1: ARQUERO Nivel 1 con una vida de 1000 y un ataque 25")
-let Inicio3 = alert ("Aliado N°2: GUERRERO Nivel 1 con una vida de 1200 y un ataque 30")
-let Inicio4 = alert ("Aliado N°3: CABALLERO Nivel 1 con una vida de 1500 y un ataque 35")
-let Inicio5 = alert ("Aliado N°4: HECHICERO Nivel 1 con una vida de 1500 y un ataque 34")
+const productos = [
+    {
+        id: 1, 
+        nombre: "Lampara",
+        precio: 22000, 
+        img:
+        "https://home.ripley.cl/store/Attachment/WOP/D367/2000388125034/2000388125034_2.jpg"
+    },
+    {
+        id: 2,
+        nombre: "Mesa",
+        precio: 22500, 
+        img:
+        "https://falabella.scene7.com/is/image/Falabella/6829972_1?wid=1500&hei=1500&qlt=70"
+    }, 
+    {
+        id: 3,
+        nombre: "Silla", 
+        precio: 25000,  
+        img:
+        "https://www.cic.cl/on/demandware.static/-/Sites-masterCatalog_CIC/es_CL/dwe0fccd10/original/images/products/silla-oak-ceniza-01.jpg" 
+    },
+];
 
+let carrito = []
 
-let eleccion = prompt ("¿Cual va a ser el Aliado que escogeras?")
-switch(eleccion.toLowerCase()){
-    case "arquero":
-        alert ("Haz escogido a " + eleccion);
-        break;
-    case "guerrero":
-        alert ("Haz escogido a " + eleccion);
-        break;
-    case "caballero":
-        alert ("Haz escogido a " + eleccion);
-        break;
-    case "hechizero":
-        alert ("Haz escogido a " + eleccion);
-        break;
-    default:
-        alert (eleccion + " no esta disponible")
-}
+productos.forEach((product) => {
+    let content = document.createElement("div");
+    content.className = "card";
+    content.innerHTML = ` 
+    <img src="${product.img}"
+    <h3>${product.nombre}</h3>
+    <p class="price">${product.precio} $</p>
+    `;
 
+    shopContent.append (content)
 
-class Villano {
-    constructor (nombre, oficio, vida, ataque){
-        this.nombre = nombre;
-        this.oficio = oficio;
-        this.vida = vida;
-        this.atque = ataque;
-    }
-}
+    let comprar = document.createElement ("button")
+    comprar.innerText = "comprar"; 
+    comprar.className = "comprar";
 
-let orcoN1 = new Villano("Orco Nivel 1", "Orco", 2000, 15)
-console.log(orcoN1)
+    content.append (comprar)
 
-let verus = alert (eleccion + " peleara contra " + orcoN1.nombre)
+    comprar.addEventListener("click", () => {
+        carrito.push({
+            id : product.id,
+            img: product.img,
+            nombre: product.nombre,
+            precio: product.precio,
+        });
+        console.log (carrito)
+    })
+});
 
-console.log(orcoN1.vida)
-console.log(eleccion.vida)
+verCarrito.addEventListener("click", () => {
+    const modalHeader = document.createElement("div");
+    modalHeader.clasName = "modal-header";
+    modalHeader.innerHTML = ` 
+    <h1 class="modal-header-tittle">Carrito.</h1>
+    `
+    modalContainer.append(modalHeader);
+
+    const modalbutton = document.createElement ("h1");
+    modalbutton.innerText = "x";
+    modalbutton.className = "modal-header-button";
+
+    modalHeader.append(modalbutton);
+
+    carrito.forEach((product) => {
+        let carritoContent = document.createElement("div");
+        carritoContent.clasName = "modal-content";
+        carritoContent.innerHTML = `
+        <img src="${product.img}">
+        <h3>${product.nombre}</h3>
+        <p>${product.precio} $</p>
+    `;
+
+    modalContainer.append(carritoContent)
+    });
+
+    const total = carrito.reduce((acc, el) => acc + el.precio, 0); 
+
+    const totalBuying = document.createElement ("div")
+    totalBuying.className = "total-content"; 
+    totalBuying.innerHTML = `total a pagar: ${total} $`
+
+    modalContainer.append (totalBuying)
+});
+
